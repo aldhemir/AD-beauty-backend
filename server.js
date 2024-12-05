@@ -9,18 +9,15 @@ const alunoRoutes = require('./routes/alunoRoutes'); // Importa as rotas dos alu
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../frontend')));
-
 // Middleware
 app.use(express.json());
 app.use(cors());
 
+// Serve arquivos estáticos do frontend
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 // Registro das rotas
 app.use('/alunos', alunoRoutes); // Prefixo '/alunos'
-
-
-// Servir arquivos estáticos do frontend
-app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Rotas de API
 app.get('/', (req, res) => {
@@ -43,7 +40,7 @@ app.put('/editar-aluno/:id', alunoController.editarAluno);  // Rota para editar 
 app.delete('/excluir-aluno/:id', alunoController.excluirAluno);  // Rota para excluir um aluno
 
 // Inicialização do servidor
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;  // Usa a porta do Render ou 3000 como fallback
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
