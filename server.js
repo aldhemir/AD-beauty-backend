@@ -6,6 +6,7 @@ const alunoController = require('./controllers/alunoController');
 const { getCursos, excluirCurso } = require('./controllers/cursoController');
 const { login, register } = require('./controllers/authController');
 const alunoRoutes = require('./routes/alunoRoutes'); // Importa as rotas dos alunos
+require('./db.js');  // Conexão com o banco de dados
 
 const app = express();
 
