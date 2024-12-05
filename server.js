@@ -41,7 +41,8 @@ app.put('/editar-aluno/:id', alunoController.editarAluno);  // Rota para editar 
 app.delete('/excluir-aluno/:id', alunoController.excluirAluno);  // Rota para excluir um aluno
 
 // Inicialização do servidor
-const PORT = process.env.PORT || 3000;  // Usa a porta do Render ou 3000 como fallback
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
