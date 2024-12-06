@@ -15,7 +15,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Credenciais inválidas' });
     }
 
-    // Verificar se a senha fornecida corresponde à armazenada (ideal usar hashing de senha)
+    // Verificar se a senha fornecida corresponde à armazenada (sem hashing, como você pediu)
     if (data.senha !== senha) {
       return res.status(401).json({ message: 'Credenciais inválidas' });
     }
@@ -30,6 +30,11 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   const { nome, email, senha } = req.body;
 
+  // Verificar se os dados necessários foram fornecidos
+  if (!nome || !email || !senha) {
+    return res.status(400).json({ message: 'Nome, e-mail e senha são obrigatórios.' });
+  }
+
   try {
     // Verificar se o email já está registrado
     const { data: existingVendedor, error: checkError } = await supabase
@@ -38,7 +43,7 @@ const register = async (req, res) => {
       .eq('email', email)
       .single();
 
-    if (checkError && checkError.code !== 'PGRST100') {
+    if (checkError) {
       return res.status(500).json({ message: 'Erro ao verificar vendedor existente', error: checkError });
     }
 
