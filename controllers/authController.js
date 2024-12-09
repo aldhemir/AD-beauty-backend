@@ -49,16 +49,15 @@ const register = async (req, res) => {
     // Verificar se o email já está registrado
     const { data: existingVendedor, error: checkError } = await supabase
       .from('vendedores')
-      .select('*')
-      .eq('email', email)
-      .single();
+      .select('email') // Buscar apenas o campo 'email' para otimizar
+      .eq('email', email);
 
-    if (checkError && checkError.code !== 'PGRST100') {
+    if (checkError) {
       console.log('Erro ao verificar vendedor existente: ', checkError);
       return res.status(500).json({ message: 'Erro ao verificar vendedor existente', error: checkError });
     }
 
-    if (existingVendedor) {
+    if (existingVendedor.length > 0) {
       console.log('Email já registrado: ', email);
       return res.status(400).json({ message: 'Email já registrado' });
     }
@@ -68,6 +67,7 @@ const register = async (req, res) => {
     const { data, error } = await supabase
       .from('vendedores')
       .insert([{ nome, email, senha }])
+      .select()
       .single();
 
     if (error) {
