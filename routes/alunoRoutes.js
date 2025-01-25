@@ -11,9 +11,13 @@ const {
 // Rota para buscar alunos por curso
 router.get('/curso/:id', getAlunosPorCurso);
 
-// Rotas para adicionar, editar e excluir alunos
+// Rota para adicionar um aluno
 router.post('/add', addAluno);
+
+// Rota para editar um aluno
 router.put('/editar/:id', editarAluno);
+
+// Rota para excluir um aluno
 router.delete('/excluir/:id', excluirAluno);
 
 module.exports = router;
