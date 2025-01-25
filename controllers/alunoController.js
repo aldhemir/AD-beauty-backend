@@ -90,7 +90,7 @@ const addAluno = async (req, res) => {
 
 // Função para editar um aluno
 const editarAluno = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params; // ID do aluno a ser editado
   const {
     nome, sobrenome, telefone, data_nascimento, cpf, email, curso_id,
     data_curso, sinal, valor, presente, vendedora, formas_pagamento, observacao, senha,
@@ -99,26 +99,40 @@ const editarAluno = async (req, res) => {
   console.log(`Editando aluno ID: ${id}`); // Log para depuração
 
   try {
-    const { data, error } = await supabase
+    // Atualizar os dados do aluno
+    const { error: updateError } = await supabase
       .from('alunos')
-      .update([{
+      .update({
         nome, sobrenome, telefone, data_nascimento, cpf, email, curso_id,
         data_curso, sinal, valor, presente, vendedora, formas_pagamento, observacao, senha,
-      }])
+      })
       .eq('id', id);
 
-    if (error) {
-      console.error('Erro no Supabase (editarAluno):', error.message);
-      return res.status(400).json({ message: 'Erro ao editar aluno', error: error.message });
+    if (updateError) {
+      console.error('Erro no Supabase (editarAluno):', updateError.message);
+      return res.status(400).json({ message: 'Erro ao editar aluno', error: updateError.message });
     }
 
-    console.log(`Aluno ID ${id} editado com sucesso`);
-    return res.status(200).json(data);
+    // Retornar o registro atualizado
+    const { data: alunoAtualizado, error: fetchError } = await supabase
+      .from('alunos')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) {
+      console.error('Erro ao buscar aluno atualizado:', fetchError.message);
+      return res.status(400).json({ message: 'Erro ao buscar aluno atualizado', error: fetchError.message });
+    }
+
+    console.log(`Aluno ID ${id} editado e atualizado com sucesso`);
+    return res.status(200).json(alunoAtualizado);
   } catch (error) {
     console.error('Erro inesperado (editarAluno):', error.message);
     return res.status(500).json({ message: 'Erro interno do servidor' });
   }
 };
+
 
 // Função para excluir um aluno
 const excluirAluno = async (req, res) => {
