@@ -32,5 +32,4 @@
 - Cadastro, edição e exclusão de alunos
 - Gestão de cursos (com categorização)
 - Acompanhamento de presença, pagamento e sinal
-- Exportação de dados para CSV
 - Integração entre frontend e backend via API
